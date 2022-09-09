@@ -8,7 +8,7 @@ use Laravel\Socialite\Facades\Socialite;
 class SocialLoginController extends Controller
 {
 
-    public function redirect($social): string
+    public function redirect($social = 'twitter'): string
     {
         if ($social !== 'twitter') {
             return Socialite::driver($social)->stateless()->redirect()->getTargetUrl();

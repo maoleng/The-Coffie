@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\SocialLoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\ApiAuthenticate\AppAuthenticate;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'auth'], static function() {
@@ -14,6 +15,10 @@ Route::group(['prefix' => 'auth'], static function() {
     Route::post('/register', [AuthController::class, 'processRegister']);
     Route::post('/verify_register', [AuthController::class, 'verifyRegister']);
     Route::post('/verify_new_location', [AuthController::class, 'verifyNewLocation']);
+    Route::group(['middleware' => [StartSession::class]], static function () {
+        Route::get('/twitter/redirect', [SocialLoginController::class, 'redirect']);
+        Route::get('/twitter/callback', [SocialLoginController::class, 'callback']);
+    });
     Route::get('/{social}/redirect', [SocialLoginController::class, 'redirect']);
     Route::get('/{social}/callback', [SocialLoginController::class, 'callback']);
 });
